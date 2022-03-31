@@ -13,8 +13,8 @@ defmodule FoxGooseBagOfCorn.Puzzle do
     ] 
   end
 
-  def to_set(list) when is_list(list), do: Enum.into(list, HashSet.new)
-  def step_to_sets(step), do: step |> Enum.map &to_set/1
+  def to_set(list) when is_list(list), do: Enum.into(list, MapSet.new)
+  def step_to_sets(step), do: step |> Enum.map(&to_set/1)
 
   @doc """
     Defines a sigil for a HashSet of atoms
@@ -22,15 +22,15 @@ defmodule FoxGooseBagOfCorn.Puzzle do
     Example: 
     iex> import #{__MODULE__}
     iex> ~H":a :b :c"
-    #HashSet<[:c, :b, :a]>
+    #MapSet<[:a, :b, :c]>
     iex> ~H""
-    #HashSet<[]>
+    #MapSet<[]>
   """
   def sigil_H(str, _opts) do
     str |> String.split(" ") 
         |> Enum.filter(&String.length(&1) > 0)
         |> Enum.map(&String.replace(&1,":","")) 
         |> Enum.map(&String.to_atom/1)
-        |> Enum.into(HashSet.new)
+        |> Enum.into(MapSet.new)
   end
 end
